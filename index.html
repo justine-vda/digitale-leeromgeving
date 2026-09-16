@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mijn digitale leeromgeving</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <section id="home" class="screen">
+      <div class="hero">
+        <div class="hero-icon">💻</div>
+        <p class="eyebrow">DIGITALE LEEROMGEVING</p>
+        <h1>Mijn digitale leeromgeving</h1>
+        <p class="welcome">Welkom! Kies je klas om te beginnen.</p>
+      </div>
+      <div class="class-grid">
+        <button class="class-card active" id="l4Button">
+          <span class="emoji">🚀</span><strong>L4</strong><span>Aan de slag</span><b>→</b>
+        </button>
+        <button class="class-card disabled"><span class="emoji">🔒</span><strong>L5</strong><span>Binnenkort</span></button>
+        <button class="class-card disabled"><span class="emoji">🔒</span><strong>L6</strong><span>Binnenkort</span></button>
+      </div>
+      <p class="footer">Leer • Oefen • Ontdek • Beheers</p>
+    </section>
+
+    <section id="l4" class="screen hidden">
+      <button id="backButton" class="back">← Terug</button>
+      <div class="heading">
+        <p class="eyebrow">L4</p>
+        <h2>Wat wil je vandaag ontdekken?</h2>
+        <p>Kies een wereld en ga stap voor stap aan de slag.</p>
+      </div>
+      <div class="world-grid">
+        <button class="world-card"><span>📱</span><strong>Digitaal communiceren</strong><small>Online, offline, verzenden en ontvangen.</small><b>→</b></button>
+        <button class="world-card"><span>🧩</span><strong>De Codekraker</strong><small>Leer computers duidelijke opdrachten geven.</small><b>→</b></button>
+        <button class="world-card"><span>💻</span><strong>De Digitale Werkplaats</strong><small>Ontdek apparaten, toetsenbord, bestanden en mappen.</small><b>→</b></button>
+        <button class="world-card"><span>🔎</span><strong>De Zoekmachine</strong><small>Leer slimme zoekopdrachten maken en resultaten beoordelen.</small><b>→</b></button>
+        <button class="world-card wide"><span>🛡️</span><strong>De Digitale Bewaker</strong><small>Leer welke informatie je online wel of niet deelt.</small><b>→</b></button>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
