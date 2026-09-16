@@ -10,17 +10,23 @@ let stage = 1;
 let questionIndex = 0;
 let score = 0;
 
-document.getElementById("l4Button").onclick = () => show(l4);
-document.getElementById("backToHome").onclick = () => show(home);
-document.getElementById("backToWorlds").onclick = () => show(l4);
+document.getElementById("l4Button").addEventListener("click", () => show(l4));
+document.getElementById("backToHome").addEventListener("click", () => show(home));
+document.getElementById("backToWorlds").addEventListener("click", () => show(l4));
 
-document.querySelector('[data-world="communicatie"]').onclick = () => {
+document.querySelector('[data-world="communicatie"]').addEventListener("click", () => {
   stage = 1;
   questionIndex = 0;
   score = 0;
   show(communication);
   renderStage();
-};
+});
+
+document.querySelectorAll(".world-card").forEach(card => {
+  if (!card.dataset.world) {
+    card.addEventListener("click", () => alert("Deze leerwereld bouwen we later."));
+  }
+});
 
 function show(section) {
   [home, l4, communication].forEach(s => s.classList.add("hidden"));
@@ -52,83 +58,120 @@ function renderStage() {
   if (stage === 5) renderMastery();
 }
 
+/* 1. ONTDEK & LEER
+   Veel minder tekst: eerst doen, daarna pas het begrip benoemen. */
 function renderDiscover() {
   lessonContent.innerHTML = `
     <div class="lesson-card">
-      <h3>📨 Eerst: wie stuurt en wie ontvangt?</h3>
-      <p class="intro">Als iemand iets verstuurt, noemen we die persoon de <strong>verzender</strong>. De persoon die iets krijgt, is de <strong>ontvanger</strong>.</p>
-
-      <div class="visual-message">
-        <div class="person"><span>👧</span>Emma<br><small>verstuurt</small></div>
-        <div class="arrow-big">→ 💬 →</div>
-        <div class="person"><span>👦</span>Milan<br><small>ontvangt</small></div>
+      <div class="interactive-title">
+        <div class="emoji">📨</div>
+        <h3>Wie stuurt het bericht?</h3>
+        <p>Help Emma en Milan. Tik op de persoon die het bericht verstuurt.</p>
+        <div class="tap-hint">👆 Tik op een kaart</div>
       </div>
 
-      <div class="concept-grid">
-        <div class="concept">
-          <div class="big">📤</div>
-          <h4>Verzender</h4>
-          <p>De verzender is degene die iets <strong>verstuurt</strong>.</p>
-        </div>
-        <div class="concept">
-          <div class="big">📥</div>
-          <h4>Ontvanger</h4>
-          <p>De ontvanger is degene die iets <strong>ontvangt</strong>.</p>
-        </div>
+      <div class="choice-flow">
+        <button class="tap-card" id="emmaCard" type="button">
+          <span class="icon">👧</span><strong>Emma</strong><small>heeft een bericht</small>
+        </button>
+        <div class="flow-arrow">→</div>
+        <button class="tap-card" id="milanCard" type="button">
+          <span class="icon">👦</span><strong>Milan</strong><small>krijgt het bericht</small>
+        </button>
       </div>
 
-      <p class="intro"><strong>Dit kan digitaal zijn, maar ook in het echte leven.</strong> Denk aan een brief, een cadeau, een foto of een bericht.</p>
+      <div id="discoverFeedback"></div>
 
-      <div class="lesson-action"><button class="primary" id="next1">Ik snap het →</button></div>
+      <div class="mini-scenario hidden" id="senderExplain">
+        <strong>🎯 Juist!</strong>
+        <p>Emma <strong>stuurt</strong> het bericht. Emma is dus de <strong>verzender</strong>.</p>
+        <button class="primary" id="nextDiscover" type="button">Nu online of offline →</button>
+      </div>
     </div>`;
-  document.getElementById("next1").onclick = () => renderOnline();
+
+  document.getElementById("emmaCard").addEventListener("click", () => {
+    document.getElementById("emmaCard").classList.add("selected");
+    document.getElementById("milanCard").disabled = true;
+    document.getElementById("discoverFeedback").className = "feedback good";
+    document.getElementById("discoverFeedback").innerHTML = "✅ Goed gezien! Emma stuurt het bericht.";
+    document.getElementById("senderExplain").classList.remove("hidden");
+  });
+
+  document.getElementById("milanCard").addEventListener("click", () => {
+    const f = document.getElementById("discoverFeedback");
+    f.className = "feedback bad";
+    f.innerHTML = "❌ Kijk naar het pijltje: wie <strong>stuurt</strong> het bericht?";
+  });
+
+  document.getElementById("nextDiscover").addEventListener("click", renderOnline);
 }
 
 function renderOnline() {
   lessonContent.innerHTML = `
     <div class="lesson-card">
-      <h3>🌐 Online of offline?</h3>
-      <p class="intro"><strong>Online</strong> betekent dat een apparaat verbonden is met het internet. <strong>Offline</strong> betekent dat het apparaat niet met het internet verbonden is.</p>
-      <div class="concept-grid">
-        <div class="concept"><div class="big">🌐</div><h4>ONLINE</h4><p>Je gebruikt een internetverbinding.</p></div>
+      <div class="interactive-title">
+        <div class="emoji">🌐</div>
+        <h3>Online of offline?</h3>
+        <p>Je hoeft de woorden nog niet uit je hoofd te kennen. Kijk naar het voorbeeld.</p>
+      </div>
+
+      <div class="tap-card-grid">
+        <div class="concept"><div class="big">🌐</div><h4>ONLINE</h4><p>Je hebt een internetverbinding nodig.</p></div>
         <div class="concept"><div class="big">📴</div><h4>OFFLINE</h4><p>Je hebt geen internetverbinding nodig.</p></div>
       </div>
+
       <div class="apply-box">
-        <p class="question">Voorbeeld: je opent een website.</p>
+        <p class="question">📱 Je opent een website.</p>
+        <p><strong>Wat denk je?</strong></p>
         <div class="answer-grid">
-          <button class="answer" data-answer="online">🌐 Online</button>
-          <button class="answer" data-answer="offline">📴 Offline</button>
+          <button class="answer" data-answer="online" type="button">🌐 Online</button>
+          <button class="answer" data-answer="offline" type="button">📴 Offline</button>
         </div>
-        <div id="feedback"></div>
+        <div id="feedback" aria-live="polite"></div>
       </div>
-      <div class="lesson-action"><button class="primary hidden" id="next2">Verder →</button></div>
+      <div class="lesson-action"><button class="primary hidden" id="next2" type="button">Ik ben klaar →</button></div>
     </div>`;
 
   document.querySelectorAll(".answer").forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener("click", () => {
       const feedback = document.getElementById("feedback");
       if (btn.dataset.answer === "online") {
+        document.querySelectorAll(".answer").forEach(b => b.disabled = true);
         feedback.className = "feedback good";
-        feedback.innerHTML = "✅ Juist! Een website openen doe je met een internetverbinding. Dat is <strong>online</strong>.";
+        feedback.innerHTML = "✅ Juist! Een website heeft internet nodig. Dat is <strong>online</strong>.";
         document.getElementById("next2").classList.remove("hidden");
       } else {
         feedback.className = "feedback bad";
-        feedback.innerHTML = "❌ Nog niet. Een website heeft een internetverbinding nodig. Probeer opnieuw.";
+        feedback.innerHTML = "❌ Nog niet. Een website heeft internet nodig. Probeer opnieuw.";
       }
-    };
+    });
   });
-  document.getElementById("next2").onclick = nextStage;
+  document.getElementById("next2").addEventListener("click", nextStage);
 }
 
+/* 2. BEGRIJP */
 const understandQuestions = [
-  {q:"Emma stuurt een brief naar Milan. Wie is de verzender?", a:["Emma","Milan"], correct:0, why:"Emma stuurt de brief. Zij is dus de verzender."},
-  {q:"Emma stuurt een brief naar Milan. Wie is de ontvanger?", a:["Emma","Milan"], correct:1, why:"Milan krijgt de brief. Hij is dus de ontvanger."},
-  {q:"Je zoekt iets op het internet. Ben je online of offline?", a:["Online 🌐","Offline 📴"], correct:0, why:"Je gebruikt het internet, dus je bent online."},
-  {q:"Je bekijkt een filmpje dat al op je tablet staat. Ben je online of offline?", a:["Online 🌐","Offline 📴"], correct:1, why:"Het filmpje staat al op je tablet. Je hebt daarvoor geen internet nodig."}
+  {q:"📨 Emma stuurt een brief naar Milan. Wie is de verzender?",a:["Emma","Milan"],correct:0,why:"Emma stuurt de brief. Zij is de verzender."},
+  {q:"📬 Emma stuurt een brief naar Milan. Wie is de ontvanger?",a:["Emma","Milan"],correct:1,why:"Milan krijgt de brief. Hij is de ontvanger."},
+  {q:"🌐 Je zoekt iets op het internet. Online of offline?",a:["Online","Offline"],correct:0,why:"Je gebruikt het internet, dus je bent online."},
+  {q:"🎬 Je bekijkt een filmpje dat al op je tablet staat. Online of offline?",a:["Online","Offline"],correct:1,why:"Het filmpje staat al op je tablet. Je hebt daarvoor geen internet nodig."}
 ];
 
 function renderUnderstand() {
   renderQuestionStage(understandQuestions, "Begrijp");
+}
+
+/* 3. OEFEN */
+const practiceQuestions = [
+  {q:"🎁 Lotte stuurt een cadeau naar Noor. Wie is de verzender?",a:["Lotte","Noor"],correct:0,why:"Lotte stuurt het cadeau."},
+  {q:"🎵 Je luistert naar een liedje dat al op je tablet staat. Online of offline?",a:["Online","Offline"],correct:1,why:"Het liedje staat al op je tablet."},
+  {q:"🌍 Je opent een website om dierenfoto's te bekijken. Online of offline?",a:["Online","Offline"],correct:0,why:"Een website openen vraagt een internetverbinding."},
+  {q:"📸 Noor krijgt een foto van Lotte. Wie is de ontvanger?",a:["Lotte","Noor"],correct:1,why:"Noor krijgt de foto."},
+  {q:"📖 Je leest een gewoon boek. Online of offline?",a:["Online","Offline"],correct:1,why:"Een gewoon boek heeft geen internet nodig."}
+];
+
+function renderPractice() {
+  renderQuestionStage(practiceQuestions, "Oefen");
 }
 
 function renderQuestionStage(questions, title) {
@@ -137,13 +180,15 @@ function renderQuestionStage(questions, title) {
     <div class="lesson-card">
       <div class="question-counter">${title} • vraag ${questionIndex + 1} van ${questions.length}</div>
       <p class="question">${q.q}</p>
-      <div class="answer-grid">${q.a.map((x,i)=>`<button class="answer" data-i="${i}">${x}</button>`).join("")}</div>
-      <div id="feedback"></div>
-      <div class="lesson-action"><button class="primary hidden" id="nextQuestion">${questionIndex === questions.length-1 ? "Naar Oefen →" : "Volgende →"}</button></div>
+      <div class="answer-grid">
+        ${q.a.map((x,i)=>`<button class="answer" data-i="${i}" type="button">${x}</button>`).join("")}
+      </div>
+      <div id="feedback" aria-live="polite"></div>
+      <div class="lesson-action"><button class="primary hidden" id="nextQuestion" type="button">${questionIndex === questions.length-1 ? "Naar Pas toe →" : "Volgende →"}</button></div>
     </div>`;
 
   document.querySelectorAll(".answer").forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener("click", () => {
       const i = Number(btn.dataset.i);
       const feedback = document.getElementById("feedback");
       if (i === q.correct) {
@@ -153,92 +198,103 @@ function renderQuestionStage(questions, title) {
         document.getElementById("nextQuestion").classList.remove("hidden");
       } else {
         feedback.className = "feedback bad";
-        feedback.innerHTML = `❌ Nog niet. ${q.correct === 0 ? "Kijk goed naar wie iets doet." : "Kijk goed naar wie iets krijgt."}<br><button class="retry">Probeer opnieuw</button>`;
-        feedback.querySelector(".retry").onclick = () => feedback.innerHTML = "";
+        feedback.innerHTML = `❌ Nog niet. Denk even opnieuw na.<br><button class="retry" type="button">↩ Opnieuw</button>`;
+        feedback.querySelector(".retry").addEventListener("click", () => feedback.innerHTML = "");
       }
-    };
+    });
   });
 
-  document.getElementById("nextQuestion").onclick = () => {
+  document.getElementById("nextQuestion").addEventListener("click", () => {
     if (questionIndex < questions.length - 1) {
       questionIndex++;
       renderQuestionStage(questions, title);
     } else {
-      stage = 3; questionIndex = 0; renderStage();
+      stage = 4;
+      questionIndex = 0;
+      renderStage();
     }
-  };
+  });
 }
 
-const practiceQuestions = [
-  {q:"Lotte stuurt een cadeau naar Noor. Wie is de verzender?",a:["Lotte","Noor"],correct:0},
-  {q:"Je luistert naar een liedje dat al op je tablet staat. Online of offline?",a:["Online 🌐","Offline 📴"],correct:1},
-  {q:"Je opent een website om dierenfoto's te bekijken. Online of offline?",a:["Online 🌐","Offline 📴"],correct:0},
-  {q:"Noor krijgt een foto van Lotte. Wie is de ontvanger?",a:["Lotte","Noor"],correct:1},
-  {q:"Je leest een gewoon boek. Online of offline?",a:["Online 🌐","Offline 📴"],correct:1}
-];
-
-function renderPractice() {
-  renderQuestionStage(practiceQuestions, "Oefen");
-}
-
+/* 4. PAS TOE — één echte situatie */
 function renderApply() {
   lessonContent.innerHTML = `
     <div class="lesson-card">
-      <h3>🚀 Pas toe</h3>
-      <p class="intro">Lees de situatie. Kies telkens het juiste antwoord.</p>
-      <div class="apply-box">
-        <p class="question">Emma stuurt via het internet een foto naar haar papa.</p>
-        <p><strong>Wie is de verzender?</strong></p>
-        <div class="apply-row" id="applySender">
-          <button class="choice-big" data-correct="true">👧 Emma</button>
-          <button class="choice-big">👨 Papa</button>
-        </div>
-        <p style="margin-top:22px"><strong>Wie is de ontvanger?</strong></p>
-        <div class="apply-row" id="applyReceiver">
-          <button class="choice-big">👧 Emma</button>
-          <button class="choice-big" data-correct="true">👨 Papa</button>
-        </div>
-        <p style="margin-top:22px"><strong>Is Emma online of offline?</strong></p>
-        <div class="apply-row" id="applyOnline">
-          <button class="choice-big" data-correct="true">🌐 Online</button>
-          <button class="choice-big">📴 Offline</button>
-        </div>
-        <div id="applyFeedback"></div>
+      <div class="interactive-title">
+        <div class="emoji">🚀</div>
+        <h3>Jij bent de digitale detective</h3>
+        <p>Los deze situatie stap voor stap op.</p>
       </div>
-      <div class="lesson-action"><button class="primary hidden" id="nextApply">Naar Beheersing →</button></div>
+
+      <div class="apply-box">
+        <p class="question">📸 Emma stuurt via het internet een foto naar haar papa.</p>
+
+        <p><strong>1. Wie stuurt?</strong></p>
+        <div class="apply-row" id="applySender">
+          <button class="choice-big" data-correct="true" type="button">👧 Emma</button>
+          <button class="choice-big" type="button">👨 Papa</button>
+        </div>
+
+        <p style="margin-top:22px"><strong>2. Wie krijgt de foto?</strong></p>
+        <div class="apply-row" id="applyReceiver">
+          <button class="choice-big" type="button">👧 Emma</button>
+          <button class="choice-big" data-correct="true" type="button">👨 Papa</button>
+        </div>
+
+        <p style="margin-top:22px"><strong>3. Online of offline?</strong></p>
+        <div class="apply-row" id="applyOnline">
+          <button class="choice-big" data-correct="true" type="button">🌐 Online</button>
+          <button class="choice-big" type="button">📴 Offline</button>
+        </div>
+
+        <div id="applyFeedback" aria-live="polite"></div>
+      </div>
+
+      <div class="lesson-action"><button class="primary hidden" id="nextApply" type="button">Naar Beheersing →</button></div>
     </div>`;
 
   let completed = 0;
+
   document.querySelectorAll(".choice-big").forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener("click", () => {
       if (btn.parentElement.dataset.done) return;
+
       if (btn.dataset.correct === "true") {
-        btn.classList.add("correct");
+        btn.classList.add("correct","pop");
         btn.parentElement.dataset.done = "true";
+        btn.parentElement.querySelectorAll(".choice-big").forEach(b => b.disabled = true);
         completed++;
       } else {
         btn.classList.add("wrong");
         setTimeout(() => btn.classList.remove("wrong"), 450);
       }
+
       if (completed === 3) {
         document.getElementById("applyFeedback").className = "feedback good";
-        document.getElementById("applyFeedback").innerHTML = "✅ Alles juist! Je kunt de vier begrippen nu samen gebruiken.";
+        document.getElementById("applyFeedback").innerHTML = "🎉 Alles juist! Jij kunt verzender, ontvanger en online/offline samen gebruiken.";
         document.getElementById("nextApply").classList.remove("hidden");
       }
-    };
+    });
   });
-  document.getElementById("nextApply").onclick = () => { stage=5; questionIndex=0; score=0; renderStage(); };
+
+  document.getElementById("nextApply").addEventListener("click", () => {
+    stage = 5;
+    questionIndex = 0;
+    score = 0;
+    renderStage();
+  });
 }
 
+/* 5. BEHEERSING */
 const masteryQuestions = [
-  {q:"Wie is de verzender? Sara stuurt een kaart naar Amir.",a:["Sara","Amir"],correct:0},
-  {q:"Wie is de ontvanger? Sara stuurt een kaart naar Amir.",a:["Sara","Amir"],correct:1},
-  {q:"Je opent een website. Online of offline?",a:["Online 🌐","Offline 📴"],correct:0},
-  {q:"Je speelt een spel waarvoor je geen internet nodig hebt. Online of offline?",a:["Online 🌐","Offline 📴"],correct:1},
-  {q:"Tom stuurt een foto naar zijn oma. Wie ontvangt de foto?",a:["Tom","Zijn oma"],correct:1},
-  {q:"Je bekijkt een filmpje dat al op je tablet staat. Online of offline?",a:["Online 🌐","Offline 📴"],correct:1},
-  {q:"Wie is de verzender? De juf stuurt een bericht naar de klas.",a:["De juf","De klas"],correct:0},
-  {q:"Je zoekt informatie op het internet. Online of offline?",a:["Online 🌐","Offline 📴"],correct:0}
+  {q:"📨 Wie is de verzender? Sara stuurt een kaart naar Amir.",a:["Sara","Amir"],correct:0},
+  {q:"📬 Wie is de ontvanger? Sara stuurt een kaart naar Amir.",a:["Sara","Amir"],correct:1},
+  {q:"🌐 Je opent een website. Online of offline?",a:["Online","Offline"],correct:0},
+  {q:"🎮 Je speelt een spel waarvoor je geen internet nodig hebt. Online of offline?",a:["Online","Offline"],correct:1},
+  {q:"📸 Tom stuurt een foto naar zijn oma. Wie ontvangt de foto?",a:["Tom","Zijn oma"],correct:1},
+  {q:"🎬 Je bekijkt een filmpje dat al op je tablet staat. Online of offline?",a:["Online","Offline"],correct:1},
+  {q:"📢 De juf stuurt een bericht naar de klas. Wie is de verzender?",a:["De juf","De klas"],correct:0},
+  {q:"🔎 Je zoekt informatie op het internet. Online of offline?",a:["Online","Offline"],correct:0}
 ];
 
 function renderMastery() {
@@ -248,10 +304,14 @@ function renderMastery() {
         <div style="font-size:55px">🎉</div>
         <h3>Knap gedaan!</h3>
         <div class="score">${score} / ${masteryQuestions.length}</div>
-        <p>Je hebt de begrippen verzender, ontvanger, online en offline geoefend.</p>
-        <button class="primary" id="restart">Opnieuw proberen</button>
+        <p>Je hebt geoefend met <strong>verzender</strong>, <strong>ontvanger</strong>, <strong>online</strong> en <strong>offline</strong>.</p>
+        <button class="primary" id="restart" type="button">Opnieuw proberen</button>
       </div>`;
-    document.getElementById("restart").onclick = () => { questionIndex=0; score=0; renderMastery(); };
+    document.getElementById("restart").addEventListener("click", () => {
+      questionIndex = 0;
+      score = 0;
+      renderMastery();
+    });
     return;
   }
 
@@ -260,34 +320,31 @@ function renderMastery() {
     <div class="lesson-card">
       <div class="question-counter">Beheersing • vraag ${questionIndex+1} van ${masteryQuestions.length}</div>
       <p class="question">${q.q}</p>
-      <div class="answer-grid">${q.a.map((x,i)=>`<button class="answer" data-i="${i}">${x}</button>`).join("")}</div>
-      <div id="feedback"></div>
-      <div class="lesson-action"><button class="primary hidden" id="masteryNext">${questionIndex===masteryQuestions.length-1?"Resultaat bekijken →":"Volgende →"}</button></div>
+      <div class="answer-grid">${q.a.map((x,i)=>`<button class="answer" data-i="${i}" type="button">${x}</button>`).join("")}</div>
+      <div id="feedback" aria-live="polite"></div>
+      <div class="lesson-action"><button class="primary hidden" id="masteryNext" type="button">${questionIndex===masteryQuestions.length-1?"Resultaat bekijken →":"Volgende →"}</button></div>
     </div>`;
 
   document.querySelectorAll(".answer").forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener("click", () => {
       const i = Number(btn.dataset.i);
       const feedback = document.getElementById("feedback");
       document.querySelectorAll(".answer").forEach(b => b.disabled = true);
+
       if (i === q.correct) {
         score++;
         feedback.className = "feedback good";
-        feedback.innerHTML = "✅ Juist!";
+        feedback.innerHTML = "✅ Juist! Goed geredeneerd.";
       } else {
         feedback.className = "feedback bad";
         feedback.innerHTML = `❌ Niet juist. Het goede antwoord is <strong>${q.a[q.correct]}</strong>.`;
       }
       document.getElementById("masteryNext").classList.remove("hidden");
-    };
+    });
   });
 
-  document.getElementById("masteryNext").onclick = () => {
+  document.getElementById("masteryNext").addEventListener("click", () => {
     questionIndex++;
     renderMastery();
-  };
+  });
 }
-
-document.querySelectorAll(".world-card").forEach(card => {
-  if (!card.dataset.world) card.onclick = () => alert("Deze leerwereld bouwen we later.");
-});
