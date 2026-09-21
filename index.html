@@ -7,74 +7,86 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
-
-  <section id="home" class="screen">
-    <div class="hero">
-      <div class="hero-icon">💻</div>
-      <p class="eyebrow">DIGITALE LEEROMGEVING</p>
-      <h1>Mijn digitale leeromgeving</h1>
-      <p class="welcome">Welkom! Kies je klas om te beginnen.</p>
-    </div>
-    <div class="class-grid">
-      <button class="class-card active" id="l4Button" type="button">
-        <span class="emoji">🚀</span><strong>L4</strong><span>Aan de slag</span><b>→</b>
-      </button>
-      <button class="class-card disabled" type="button" disabled>
-        <span class="emoji">🔒</span><strong>L5</strong><span>Binnenkort</span>
-      </button>
-      <button class="class-card disabled" type="button" disabled>
-        <span class="emoji">🔒</span><strong>L6</strong><span>Binnenkort</span>
-      </button>
-    </div>
-    <p class="footer">Leer • Oefen • Ontdek • Beheers</p>
-  </section>
-
-  <section id="l4" class="screen hidden">
-    <button id="backToHome" class="back" type="button">← Terug</button>
-    <div class="heading">
-      <p class="eyebrow">L4</p>
-      <h2>Wat wil je vandaag ontdekken?</h2>
-      <p>Kies een wereld en ga stap voor stap aan de slag.</p>
-    </div>
-    <div class="world-grid">
-      <button class="world-card" data-world="communicatie" type="button">
-        <span>📱</span><strong>Digitaal communiceren</strong>
-        <small>Ontdek wie iets stuurt, wie iets ontvangt en wat online betekent.</small><b>→</b>
-      </button>
-      <button class="world-card" type="button"><span>🧩</span><strong>De Codekraker</strong><small>Leer computers duidelijke opdrachten geven.</small><b>→</b></button>
-      <button class="world-card" type="button"><span>💻</span><strong>De Digitale Werkplaats</strong><small>Ontdek apparaten, toetsenbord, bestanden en mappen.</small><b>→</b></button>
-      <button class="world-card" type="button"><span>🔎</span><strong>De Zoekmachine</strong><small>Leer slimme zoekopdrachten maken en resultaten beoordelen.</small><b>→</b></button>
-      <button class="world-card" type="button"><span>🛡️</span><strong>De Digitale Bewaker</strong><small>Leer welke informatie je online wel of niet deelt.</small><b>→</b></button>
-    </div>
-  </section>
-
-  <section id="communication" class="screen hidden">
-    <button id="backToWorlds" class="back" type="button">← Terug naar L4</button>
-
-    <div class="lesson-top">
-      <div>
-        <p class="eyebrow">📱 DIGITAAL COMMUNICEREN</p>
-        <h2>Wie stuurt? Wie ontvangt?</h2>
+  <main>
+    <!-- START -->
+    <section id="home" class="screen">
+      <div class="hero">
+        <div class="hero-icon">💻</div>
+        <p class="eyebrow">DIGITALE LEEROMGEVING</p>
+        <h1>Mijn digitale leeromgeving</h1>
+        <p class="welcome">Welkom! Kies je klas om te beginnen.</p>
       </div>
-      <div class="progress-wrap">
-        <span id="stageLabel">1 van 5</span>
-        <div class="progress"><div id="stageProgress"></div></div>
+      <div class="class-grid">
+        <button class="class-card active" id="l4Button">
+          <span class="emoji">🚀</span><strong>L4</strong><span>Aan de slag</span><b>→</b>
+        </button>
+        <button class="class-card disabled"><span class="emoji">🔒</span><strong>L5</strong><span>Binnenkort</span></button>
+        <button class="class-card disabled"><span class="emoji">🔒</span><strong>L6</strong><span>Binnenkort</span></button>
       </div>
-    </div>
+      <p class="footer">Leer • Oefen • Ontdek • Beheers</p>
+    </section>
 
-    <nav class="stages" aria-label="Leerfasen">
-      <button class="stage active" type="button">1. Ontdek & leer</button>
-      <button class="stage" type="button">2. Begrijp</button>
-      <button class="stage" type="button">3. Oefen</button>
-      <button class="stage" type="button">4. Pas toe</button>
-      <button class="stage" type="button">5. Beheersing</button>
-    </nav>
+    <!-- L4 WERELDEN -->
+    <section id="l4" class="screen hidden">
+      <button id="backToHome" class="back">← Terug</button>
+      <div class="heading">
+        <p class="eyebrow">L4</p>
+        <h2>Wat wil je vandaag ontdekken?</h2>
+        <p>Kies een wereld en ga stap voor stap aan de slag.</p>
+      </div>
+      <div class="world-grid">
+        <button class="world-card" data-world="communicatie"><span>📱</span><strong>Digitaal communiceren</strong><small>Online, offline, verzenden en ontvangen.</small><b>→</b></button>
+        <button class="world-card" data-world="codekraker" type="button"><span>🧩</span><strong>De Codekraker</strong><small>Leer computers duidelijke opdrachten geven.</small><b>→</b></button>
+        <button class="world-card"><span>💻</span><strong>De Digitale Werkplaats</strong><small>Ontdek apparaten, toetsenbord, bestanden en mappen.</small><b>→</b></button>
+        <button class="world-card"><span>🔎</span><strong>De Zoekmachine</strong><small>Leer slimme zoekopdrachten maken en resultaten beoordelen.</small><b>→</b></button>
+        <button class="world-card"><span>🛡️</span><strong>De Digitale Bewaker</strong><small>Leer welke informatie je online wel of niet deelt.</small><b>→</b></button>
+      </div>
+    </section>
 
-    <div id="lessonContent"></div>
-  </section>
+    <!-- WERELD 1 -->
+    <section id="communication" class="screen hidden">
+      <button id="backToWorlds" class="back">← Terug naar L4</button>
+
+      <div class="lesson-top">
+        <div>
+          <p class="eyebrow">📱 DIGITAAL COMMUNICEREN</p>
+          <h2>Wie stuurt? Wie ontvangt?</h2>
+        </div>
+        <div class="progress-wrap">
+          <span id="stageLabel">1 van 5</span>
+          <div class="progress"><div id="stageProgress"></div></div>
+        </div>
+      </div>
+
+      <nav class="stages" aria-label="Leerfasen">
+        <button class="stage active">1. Ontdek & leer</button>
+        <button class="stage">2. Begrijp</button>
+        <button class="stage">3. Oefen</button>
+        <button class="stage">4. Pas toe</button>
+        <button class="stage">5. Beheersing</button>
+      </nav>
+
+      <div id="lessonContent"></div>
+    </section>
+  
+<section id="codekraker" class="screen hidden">
+  <button id="backFromCode" class="back" type="button">← Terug naar L4</button>
+  <div class="lesson-top">
+    <div><p class="eyebrow">🧩 DE CODEKRAKER</p><h2>Hoe geef je een computer duidelijke opdrachten?</h2></div>
+    <div class="progress-wrap"><span id="codeStageLabel">1 van 5</span><div class="progress"><div id="codeStageProgress"></div></div></div>
+  </div>
+  <nav class="stages" aria-label="Leerfasen">
+    <button class="code-stage stage active" type="button">1. Ontdek & leer</button>
+    <button class="code-stage stage" type="button">2. Begrijp</button>
+    <button class="code-stage stage" type="button">3. Oefen</button>
+    <button class="code-stage stage" type="button">4. Pas toe</button>
+    <button class="code-stage stage" type="button">5. Beheersing</button>
+  </nav>
+  <div id="codeContent"></div>
+</section>
 
 </main>
-<script src="script.js"></script>
+
+  <script src="script.js"></script>
 </body>
 </html>
